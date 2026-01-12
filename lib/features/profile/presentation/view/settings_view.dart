@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:sajilo_hariyo/features/profile/presentation/view/change_password_views.dart';
+import 'package:sajilo_hariyo/features/profile/presentation/view/privacy_policy_view.dart';
+import 'package:sajilo_hariyo/features/profile/presentation/view/terms_of_service_view.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
@@ -84,9 +86,27 @@ class _SettingsViewState extends State<SettingsView> {
             },
           ),
           const SizedBox(height: 10),
-          _buildActionTile("Privacy Policy", LucideIcons.shield),
+          _buildActionTile(
+            "Privacy Policy", 
+            LucideIcons.shield,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const PrivacyPolicyView()),
+              );
+            },
+          ),
           const SizedBox(height: 10),
-          _buildActionTile("Terms of Service", LucideIcons.fileText),
+          _buildActionTile(
+            "Terms of Service", 
+            LucideIcons.fileText,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const TermsOfServiceView()),
+              );
+            },
+          ),
         ],
       ),
     );
