@@ -343,7 +343,7 @@ class LoginView extends StatelessWidget {
 
     const Color primaryGreen = Color(0xFF3A7F5F);
     const Color cardColor = Color(0xFFF8F3ED);
-    const Color darkText = Color(0xFF1B3A29);
+    const Color darkText = Color.fromRGBO(27, 58, 41, 1);
     const Color subText = Color(0xFF666666);
     const Color borderColor = Color(0xFFA09E9E);
 

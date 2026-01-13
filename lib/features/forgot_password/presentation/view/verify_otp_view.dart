@@ -169,9 +169,16 @@ class VerifyOtpView extends StatelessWidget {
                                           startTimer();
                                           MySnackBar.showInfo(
                                             context: context,
-                                            message: "OTP Resent",
+                                            message: "Resending OTP...",
                                           );
-                                          // TODO: Trigger API resend logic here if needed
+                                          context
+                                              .read<VerifyOtpViewModel>()
+                                              .add(
+                                                ResendOtpEvent(
+                                                  context: context,
+                                                  email: email,
+                                                ),
+                                              );
                                         },
                                         child: Text(
                                           "Resend",

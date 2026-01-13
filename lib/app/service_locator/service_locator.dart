@@ -307,7 +307,10 @@ Future<void> _initAuthModule() async {
   );
 
   locator.registerFactory<VerifyOtpViewModel>(
-    () => VerifyOtpViewModel(locator<VerifyOtpUseCase>()),
+    () => VerifyOtpViewModel(
+      locator<VerifyOtpUseCase>(),
+      locator<SendOtpUseCase>(),
+    ),
   );
 
   locator.registerFactory<ResetPasswordViewModel>(

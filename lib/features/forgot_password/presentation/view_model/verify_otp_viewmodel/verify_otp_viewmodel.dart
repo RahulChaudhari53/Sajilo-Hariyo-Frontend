@@ -5,15 +5,19 @@ import 'package:sajilo_hariyo/core/common/my_snackbar.dart';
 import 'package:sajilo_hariyo/features/forgot_password/domain/usecase/verify_otp_usecase.dart';
 import 'package:sajilo_hariyo/features/forgot_password/presentation/view/reset_password_view.dart';
 import 'package:sajilo_hariyo/features/forgot_password/presentation/view_model/reset_password_viewmodel/reset_password_viewmodel.dart';
+import 'package:sajilo_hariyo/features/forgot_password/domain/usecase/send_otp_usecase.dart';
 import 'package:sajilo_hariyo/features/forgot_password/presentation/view_model/verify_otp_viewmodel/verify_otp_event.dart';
 import 'package:sajilo_hariyo/features/forgot_password/presentation/view_model/verify_otp_viewmodel/verify_otp_state.dart';
 
 class VerifyOtpViewModel extends Bloc<VerifyOtpEvent, VerifyOtpState> {
+  final SendOtpUseCase _sendOtpUseCase;
   final VerifyOtpUseCase _verifyOtpUseCase;
 
-  VerifyOtpViewModel(this._verifyOtpUseCase) : super(VerifyOtpState.initial()) {
+  VerifyOtpViewModel(this._verifyOtpUseCase, this._sendOtpUseCase)
+    : super(VerifyOtpState.initial()) {
     on<SubmitVerifyOtpEvent>(_onSubmitVerifyOtp);
     on<NavigateToResetPasswordViewEvent>(_navigateToResetPassword);
+    on<ResendOtpEvent>(_onResendOtp);
   }
 
   Future<void> _onSubmitVerifyOtp(
@@ -49,6 +53,36 @@ class VerifyOtpViewModel extends Bloc<VerifyOtpEvent, VerifyOtpState> {
               email: event.email,
               otp: event.otp,
             ),
+          );
+        }
+      },
+    );
+  }
+
+  Future<void> _onResendOtp(
+    ResendOtpEvent event,
+    Emitter<VerifyOtpState> emit,
+  ) async {
+    emit(state.copyWith(isLoading: true));
+
+    final result = await _sendOtpUseCase(SendOtpParams(email: event.email));
+
+    result.fold(
+      (failure) {
+        emit(state.copyWith(isLoading: false));
+        if (event.context.mounted) {
+          MySnackBar.showError(
+            context: event.context,
+            message: failure.message,
+          );
+        }
+      },
+      (success) {
+        emit(state.copyWith(isLoading: false));
+        if (event.context.mounted) {
+          MySnackBar.showSuccess(
+            context: event.context,
+            message: "OTP Resent Successfully",
           );
         }
       },

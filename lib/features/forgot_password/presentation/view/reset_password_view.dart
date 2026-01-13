@@ -23,6 +23,9 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
   final TextEditingController passController = TextEditingController();
   final TextEditingController confirmPassController = TextEditingController();
 
+  final ValueNotifier<bool> _obscureNewPass = ValueNotifier(true);
+  final ValueNotifier<bool> _obscureConfirmPass = ValueNotifier(true);
+
   // Real-time validation state
   bool _hasMinLength = false;
   bool _hasSymbol = false;
@@ -114,25 +117,56 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                                 ),
                               ),
                             ),
-                            child: Column(
-                              children: [
-                                CustomTextFormField(
-                                  controller: passController,
-                                  labelText: "New Password",
-                                  hintText: "••••••••",
-                                  obscureText: true,
-                                  prefixIcon: LucideIcons.lock,
-                                ),
-                                const SizedBox(height: 16),
-                                CustomTextFormField(
-                                  controller: confirmPassController,
-                                  labelText: "Confirm Password",
-                                  hintText: "••••••••",
-                                  obscureText: true,
-                                  prefixIcon: LucideIcons.lock,
-                                ),
-                              ],
-                            ),
+                              child: Column(
+                                children: [
+                                  ValueListenableBuilder<bool>(
+                                    valueListenable: _obscureNewPass,
+                                    builder: (context, isObscure, _) {
+                                      return CustomTextFormField(
+                                        controller: passController,
+                                        labelText: "New Password",
+                                        hintText: "••••••••",
+                                        obscureText: isObscure,
+                                        prefixIcon: LucideIcons.lock,
+                                        suffixIcon: IconButton(
+                                          icon: Icon(
+                                            isObscure
+                                                ? LucideIcons.eye
+                                                : LucideIcons.eyeOff,
+                                            color: darkText,
+                                          ),
+                                          onPressed: () => _obscureNewPass.value =
+                                              !_obscureNewPass.value,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  const SizedBox(height: 16),
+                                  ValueListenableBuilder<bool>(
+                                    valueListenable: _obscureConfirmPass,
+                                    builder: (context, isObscure, _) {
+                                      return CustomTextFormField(
+                                        controller: confirmPassController,
+                                        labelText: "Confirm Password",
+                                        hintText: "••••••••",
+                                        obscureText: isObscure,
+                                        prefixIcon: LucideIcons.lock,
+                                        suffixIcon: IconButton(
+                                          icon: Icon(
+                                            isObscure
+                                                ? LucideIcons.eye
+                                                : LucideIcons.eyeOff,
+                                            color: darkText,
+                                          ),
+                                          onPressed: () =>
+                                              _obscureConfirmPass.value =
+                                                  !_obscureConfirmPass.value,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
                           ),
 
                           const SizedBox(height: 20),

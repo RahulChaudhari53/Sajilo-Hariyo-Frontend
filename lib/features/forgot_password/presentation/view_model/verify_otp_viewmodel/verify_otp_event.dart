@@ -26,3 +26,13 @@ class NavigateToResetPasswordViewEvent extends VerifyOtpEvent {
     required this.otp,
   });
 }
+
+class ResendOtpEvent extends VerifyOtpEvent {
+  final BuildContext context;
+  final String email;
+
+  ResendOtpEvent({
+    required this.context,
+    required this.email,
+  });
+}
